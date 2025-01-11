@@ -18,9 +18,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(db: FirebaseFirestore) {
     val navController = rememberNavController()
     var selectedItem by remember { mutableStateOf(0) }
 
@@ -38,7 +39,7 @@ fun DashboardScreen() {
                         HomeScreen()
                     }
                     composable("map") {
-                        MapScreen()
+                        MapScreen(db)
                     }
                     composable("notifications") {
                         NotificationsScreen()

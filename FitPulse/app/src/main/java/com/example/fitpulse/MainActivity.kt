@@ -29,23 +29,26 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.fitpulse.ui.HomeScreen
 import com.example.fitpulse.ui.login.DashboardScreen
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        val db = FirebaseFirestore.getInstance()
+
 
         setContent {
             FitPulseTheme {
-                MyApp()
+                MyApp(db)
             }
         }
     }
 }
 
 @Composable
-fun MyApp() {
+fun MyApp(db: FirebaseFirestore) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "homeScreen") {
@@ -65,7 +68,7 @@ fun MyApp() {
         }
 
         composable("dashboardScreen") {
-            DashboardScreen()
+            DashboardScreen(db=db)
         }
     }
 }
