@@ -24,11 +24,20 @@ class LoginViewModel(private val repository: FirebaseAuthRepository) : ViewModel
     fun login(email: String, password: String) {
         _loginState.value = LogInState(isLoading = true) // Set loading state
 
-        Log.d("Login", "Attempting to login with email: $email")
         repository.login(email, password)
-        _loginState.value = LogInState(isSuccess = true, isLoading = false)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _loginState.value = LogInState(isSuccess = true)
+                } else {
+                    val exceptionMessage = task.exception?.localizedMessage
+                        ?: "Unknown error occurred. Please try again later."
 
-
+                    _loginState.value = LogInState(
+                        isSuccess = false,
+                        errorMessage = exceptionMessage
+                    )
+                }
+            }
     }
 
 

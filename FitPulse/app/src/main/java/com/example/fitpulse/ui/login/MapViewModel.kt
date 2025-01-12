@@ -56,7 +56,8 @@ class MapViewModel(private val routesLogic: RoutesLogic) : ViewModel() {
                 routeName = _routeName.value,
                 routePoints = _routePoints.value,
                 totalDistance = totalDistance,
-                elapsedTime = elapsedTime
+                elapsedTime = elapsedTime,
+                isPublic = false
             )
             val result = routesLogic.saveRoute(userId, routeData)
             _saveRouteResult.value = result

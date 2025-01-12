@@ -29,6 +29,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.fitpulse.ui.HomeScreen
 import com.example.fitpulse.ui.login.DashboardScreen
+import com.example.fitpulse.ui.login.FriendsScreen
+import com.example.fitpulse.ui.login.ProfileScreen
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : ComponentActivity() {

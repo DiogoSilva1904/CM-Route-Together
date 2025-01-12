@@ -2,7 +2,9 @@ package com.example.fitpulse.ui.login
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
@@ -11,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,7 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 @Composable
 fun DashboardScreen(db: FirebaseFirestore) {
     val navController = rememberNavController()
-    var selectedItem by remember { mutableStateOf(0) }
+    var selectedItem by rememberSaveable { mutableStateOf(0) }
 
     Scaffold(
         content = { paddingValues ->
@@ -36,16 +39,24 @@ fun DashboardScreen(db: FirebaseFirestore) {
             ) {
                 NavHost(navController, startDestination = "home") {
                     composable("home") {
-                        HomeScreen()
+                        HomeScreen(db,navController)
                     }
                     composable("map") {
                         MapScreen(db)
                     }
-                    composable("notifications") {
-                        NotificationsScreen()
+                    composable("friends") {
+                        FriendsScreen(db,navController)
                     }
-                    composable("profile") {
-                        ProfileScreen()
+                    composable("profile_screen/{friendEmail}") { backStackEntry ->
+                        val friendEmail = backStackEntry.arguments?.getString("friendEmail")
+                        if (friendEmail != null) {
+                            ProfileScreen(friendEmail = friendEmail, db = db,navController=navController)
+                        }
+                    }
+                    composable("route_details/{routeName}/{friendEmail}") { backStackEntry ->
+                        val routeName = backStackEntry.arguments?.getString("routeName") ?: ""
+                        val userEmail = backStackEntry.arguments?.getString("friendEmail") ?: ""
+                        RouteDetailsScreen(routeName = routeName, userEmail = userEmail, db = db)
                     }
                 }
             }
@@ -58,8 +69,7 @@ fun DashboardScreen(db: FirebaseFirestore) {
                     when (index) {
                         0 -> navController.navigate("home")
                         1 -> navController.navigate("map")
-                        2 -> navController.navigate("notifications")
-                        3 -> navController.navigate("profile")
+                        2 -> navController.navigate("friends")
                     }
                 }
             )
@@ -103,14 +113,8 @@ fun BottomNavigationBar(selectedItem: Int, onItemSelected: (Int) -> Unit) {
         NavigationBarItem(
             selected = selectedItem == 2,
             onClick = { onItemSelected(2) },
-            icon = { Icon(Icons.Filled.Notifications, contentDescription = "Notifications") },
-            label = { Text("Notifications") }
-        )
-        NavigationBarItem(
-            selected = selectedItem == 3,
-            onClick = { onItemSelected(3) },
-            icon = { Icon(Icons.Filled.Person, contentDescription = "Profile") },
-            label = { Text("Profile") }
+            icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Friends") },
+            label = { Text("Friends") }
         )
     }
 }
