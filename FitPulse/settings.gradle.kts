@@ -9,6 +9,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        google()
     }
 }
 dependencyResolutionManagement {
@@ -19,6 +20,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "FitPulse"
-include(":app")
+rootProject.name = "Routes"
+include(":mobile")
+include(":wear")
  
